@@ -2,6 +2,10 @@ import random
 
 board = [' '] * 9
 
+# Symbols will be assigned at runtime based on who goes first
+AI_SYMBOL = 'O'
+HUMAN_SYMBOL = 'X'
+
 def print_board(current_board):
     for r in range(3):
         row = current_board[3*r:3*r+3]
@@ -52,3 +56,51 @@ def computer_move(board, symbol):
     print(f"Computer placed {symbol} at position {move}")
     print_board(board)
 
+
+def choose_first_player():
+    while True:
+        choice = input("Who goes first? (human/ai): ").strip().lower()
+        if choice in ('human', 'ai'):
+            return choice
+        print("Please type 'human' or 'ai'.")
+
+
+def main():
+    global AI_SYMBOL, HUMAN_SYMBOL
+
+    # Reset board for a fresh game
+    for i in range(9):
+        board[i] = ' '
+
+    first = choose_first_player()
+    if first == 'human':
+        HUMAN_SYMBOL, AI_SYMBOL = 'X', 'O'
+        current = 'human'
+    else:
+        AI_SYMBOL, HUMAN_SYMBOL = 'X', 'O'
+        current = 'ai'
+
+    print("Symbols assigned:")
+    print(f"  Human: {HUMAN_SYMBOL}")
+    print(f"  AI:    {AI_SYMBOL}")
+    print_board(board)
+
+    while True:
+        if current == 'human':
+            human_move(board, HUMAN_SYMBOL)
+        else:
+            computer_move(board, AI_SYMBOL)
+
+        winner = check_winner(board)
+        if winner is not None:
+            if winner == 'Draw':
+                print("It's a draw!")
+            else:
+                print(f"{winner} wins!")
+            break
+
+        current = 'ai' if current == 'human' else 'human'
+
+
+if __name__ == "__main__":
+    main()
