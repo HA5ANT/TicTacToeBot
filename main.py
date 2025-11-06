@@ -60,11 +60,20 @@ def check_winner(board):
 
 
 def computer_move(board, symbol):
-    available = [i for i, cell in enumerate(board) if cell == " "]
+    # choose best minimax move; fallback to random if something odd happens
     move = best_move(board, symbol)
-    make_move(board, symbol)
+    if move is None:
+        available = [i for i, cell in enumerate(board) if cell == " "]
+        if not available:
+            return None
+        move = random.choice(available)
+
+    # actually place the symbol and return the move index
+    make_move(board, move, symbol)
     print(f"Computer placed {symbol} at position {move}")
     print_board(board)
+    return move
+
 
 
 def choose_first_player():
