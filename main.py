@@ -1,11 +1,10 @@
-from tkinter import NO
-
+import random
 
 board = [' '] * 9
 
-def print_board():
+def print_board(current_board):
     for r in range(3):
-        row = board[3*r:3*r+3]
+        row = current_board[3*r:3*r+3]
         print('|'.join(row))
         if r < 2:
             print('-----')
@@ -31,15 +30,7 @@ def human_move(board, symbol):
                 print("Cell already taken. Try again.")
         except ValueError:
             print("Invalid input. Please enter a number between 0 and 8.")
-
-if __name__ == "__main__":
-    print_board()
-    human_move(board, 'X')
-    print_board()
     
-
-
-
 def check_winner(board):
     win_positions = [
         (0, 1, 2), (3, 4, 5), (6, 7, 8),  # rows
@@ -53,4 +44,11 @@ def check_winner(board):
     if ' ' not in board:
         return 'Draw'
     return None
+
+def computer_move(board, symbol):
+    available = [i for i, cell in enumerate(board) if cell == ' ']
+    move = random.choice(available)
+    make_move(board,move,symbol)
+    print(f"Computer placed {symbol} at position {move}")
+    print_board(board)
 
